@@ -4,16 +4,15 @@
 
 - group: name=serf
 
-- get_url: url=https://dl.bintray.com/mitchellh/serf/{{ version }}_linux_amd64.zip
+- get_url: url=https://releases.hashicorp.com/serf/{{version}}/serf_{{version}}_linux_amd64.zip
   args:
     dest: /tmp
     mode: 0644
     sha256sum: "{{ sha256sum }}"
   delegate_to: localhost
 
-- unarchive: src=/tmp/{{ version }}_linux_amd64.zip dest=/tmp
+- unarchive: src=/tmp/serf_{{version}}_linux_amd64.zip dest=/tmp creates=/tmp/serf_{{version}}_linux_amd64.zip
   delegate_to: localhost
-  notify: Remove temp files
 
 - copy: src=/tmp/serf dest=/usr/local/bin/serf owner=serf group=serf mode=0755
 
