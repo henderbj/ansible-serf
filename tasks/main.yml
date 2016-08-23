@@ -34,5 +34,8 @@
 - copy: src=./etc/init/serf.conf dest=/etc/init/serf.conf owner=root group=root mode=0644
   when: daemon_enabled and upstart
 
+- copy: src=./etc/systemd/system/serf.systemd dest=/etc/systemd/system/serf.service owner=root group=root mode=0644
+  when: ansible_service_mgr=="systemd"
+
 - service: name=serf state=started enabled=yes
   when: daemon_enabled
