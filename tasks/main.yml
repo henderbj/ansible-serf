@@ -4,38 +4,53 @@
 
 - group: name=serf
 
-- get_url: url=https://releases.hashicorp.com/serf/{{version}}/serf_{{version}}_linux_amd64.zip
+- get_url:
   args:
+    url: https://releases.hashicorp.com/serf/{{version}}/serf_{{version}}_linux_amd64.zip
     dest: /tmp
     mode: 0644
-    sha256sum: "{{ sha256sum }}"
+    checksum: "sha256:{{sha256sum}}"
+    tmp_dest: /tmp/
+    use_proxy: false
   delegate_to: localhost
+  become: true
 
-- unarchive: src=/tmp/serf_{{version}}_linux_amd64.zip dest=/tmp creates=/tmp/serf_{{version}}_linux_amd64.zip
+- unarchive: src=/tmp/serf_{{version}}_linux_amd64.zip dest=/tmp creates=/tmp/serf remote_src=yes
   delegate_to: localhost
+  become: true
 
 - copy: src=/tmp/serf dest=/usr/local/bin/serf owner=serf group=serf mode=0755
+  become: true
 
 - file: path=/usr/local/bin/serf owner=serf group=serf mode=0755 state=file
+  become: true
 
-- file: path=/etc/serf.d owner=serf group=serf mode=0755 state=directory
+- file: path=/etc/serf.d/snapshots owner=serf group=serf mode=0755 state=directory
+  become: true
 
 - template: src=./etc/serf.conf dest=/etc/serf.conf owner=serf group=serf mode=0644
+  become: true
 
 - file: path=/etc/consul.d mode=0755 state=directory
   when: consul_enabled
+  become: true
 
 - copy: src=./etc/consul.d/serf.json dest=/etc/consul.d/serf.json owner=serf group=serf mode=0644
   when: consul_enabled
+  become: true
 
 - copy: src=./etc/init.d/serf dest=/etc/init.d/serf owner=serf group=serf mode=0755
   when: daemon_enabled and not upstart
+  become: true
 
 - copy: src=./etc/init/serf.conf dest=/etc/init/serf.conf owner=root group=root mode=0644
   when: daemon_enabled and upstart
+  become: true
 
 - copy: src=./etc/systemd/system/serf.systemd dest=/etc/systemd/system/serf.service owner=root group=root mode=0644
   when: ansible_service_mgr=="systemd"
+  become: true
 
 - service: name=serf state=started enabled=yes
   when: daemon_enabled
+  become: true
