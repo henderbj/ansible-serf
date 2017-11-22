@@ -1,8 +1,10 @@
 ---
 # tasks for serf
 - user: name=serf
+  become: true
 
 - group: name=serf
+  become: true
 
 - get_url:
   args:

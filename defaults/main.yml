@@ -1,6 +1,6 @@
 ---
 # default vars for serf
-version: 0.8.0
-sha256sum: 67620e000fea28c3755e21d475a97fd65ad397df02c60c0e801ae2d521587b77
+version: 0.8.1
+sha256sum: b42b7866a7584adf6e755b42711cd0234993cb9347062a27e494280a434f32bf
 consul_enabled: false
 daemon_enabled: true
